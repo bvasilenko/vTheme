@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 bvasilenko
 import { tokens } from "../tokens/index.js";
 import type { TokenTree } from "../schema/index.js";
 

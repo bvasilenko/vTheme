@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 bvasilenko
 import { z } from "zod";
 import { SpaceScaleSchema } from "./space.schema.js";
 import { ColorScaleSchema } from "./color.schema.js";

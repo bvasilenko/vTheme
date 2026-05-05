@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 bvasilenko
 import { tokens } from "../tokens/index.js";
 
 type FontSizeTuple = [string, { lineHeight: string; fontWeight: string }];

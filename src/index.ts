@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 bvasilenko
 export { tokens, colorLight, colorDark } from "./tokens/index.js";
 export { cssVars, tailwindTheme, type TailwindExtendTheme } from "./build/index.js";
 export {

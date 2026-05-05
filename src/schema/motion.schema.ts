@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 bvasilenko
 import { z } from "zod";
 
 export const EaseMapSchema = z.record(z.string(), z.string());

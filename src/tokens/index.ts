@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 bvasilenko
 import { deepFreeze } from "../utils/deepFreeze.js";
 import type { TokenTree } from "../schema/index.js";
 import { spaceScale } from "./space.js";

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 bvasilenko
 import type { TypeScale } from "../schema/index.js";
 
 export const typeScale: TypeScale = {

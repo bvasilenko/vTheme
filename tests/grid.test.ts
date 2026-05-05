@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 bvasilenko
 import { describe, it, expect } from "vitest";
 import { tokens, SpaceKeySchema } from "../src/index.js";
 import type { SpaceKey } from "../src/index.js";
