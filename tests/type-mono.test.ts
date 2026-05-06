@@ -8,6 +8,12 @@ const TYPE_KEY_ORDER: TypeKey[] = [
   "xs", "sm", "base", "lg", "xl", "2xl", "3xl", "4xl", "5xl",
 ];
 
+describe("type scale key coverage", () => {
+  it("TYPE_KEY_ORDER contains exactly the keys present in the type scale", () => {
+    expect([...TYPE_KEY_ORDER].sort()).toEqual(Object.keys(tokens.type).sort());
+  });
+});
+
 describe("type scale monotonicity", () => {
   it("sizes are strictly increasing across the ordered scale", () => {
     const sizes = TYPE_KEY_ORDER.map((k) => parseFloat(tokens.type[k]!.size));

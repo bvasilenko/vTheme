@@ -13,11 +13,12 @@ describe("frozen tokens — Object.isFrozen on every group", () => {
 });
 
 describe("frozen tokens — nested objects frozen recursively", () => {
-  it("every TypeStep within the type scale is frozen", () => {
-    for (const step of Object.values(tokens.type)) {
+  it.each(Object.entries(tokens.type))(
+    "type.%s step object is frozen",
+    (_, step) => {
       expect(Object.isFrozen(step)).toBe(true);
-    }
-  });
+    },
+  );
 
   it("motion.ease map is frozen", () => {
     expect(Object.isFrozen(tokens.motion.ease)).toBe(true);

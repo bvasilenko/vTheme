@@ -13,12 +13,13 @@ function toPx(value: string): number {
 }
 
 describe("space grid alignment", () => {
-  it("every space value is a 4px multiple", () => {
-    for (const [key, value] of Object.entries(tokens.space)) {
+  it.each(Object.entries(tokens.space))(
+    "space.%s is a 4px multiple",
+    (key, value) => {
       const px = toPx(value);
       expect(px % 4, `space["${key}"] = "${value}" (${px}px) is not a 4px multiple`).toBe(0);
-    }
-  });
+    },
+  );
 });
 
 describe("space scale key completeness", () => {

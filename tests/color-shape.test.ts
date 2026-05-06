@@ -3,21 +3,26 @@
 import { describe, it, expect } from "vitest";
 import { tokens, colorLight, colorDark, OKLCHSchema } from "../src/index.js";
 
-function assertAllOKLCH(scale: Record<string, string>, label: string): void {
-  for (const [key, value] of Object.entries(scale)) {
-    const result = OKLCHSchema.safeParse(value);
-    expect(result.success, `${label}.${key} = "${value}" failed OKLCH validation`).toBe(true);
-  }
-}
-
 describe("color scale — OKLCH format validity", () => {
-  it("every colorLight value is valid OKLCH", () => {
-    assertAllOKLCH(colorLight, "colorLight");
-  });
+  it.each(Object.entries(colorLight))(
+    "colorLight.%s is valid OKLCH",
+    (key, value) => {
+      expect(
+        OKLCHSchema.safeParse(value).success,
+        `colorLight.${key} = "${value}" failed OKLCH validation`,
+      ).toBe(true);
+    },
+  );
 
-  it("every colorDark value is valid OKLCH", () => {
-    assertAllOKLCH(colorDark, "colorDark");
-  });
+  it.each(Object.entries(colorDark))(
+    "colorDark.%s is valid OKLCH",
+    (key, value) => {
+      expect(
+        OKLCHSchema.safeParse(value).success,
+        `colorDark.${key} = "${value}" failed OKLCH validation`,
+      ).toBe(true);
+    },
+  );
 
   it("tokens.color is the colorLight reference", () => {
     expect(tokens.color).toBe(colorLight);
@@ -29,10 +34,14 @@ describe("color scale — light/dark structural parity", () => {
     expect(Object.keys(colorLight).sort()).toEqual(Object.keys(colorDark).sort());
   });
 
-  it("colorLight and colorDark are distinct objects with distinct values", () => {
-    expect(colorLight).not.toBe(colorDark);
+  it("at least one semantic key differs between the light and dark scales", () => {
     const sharedKeys = Object.keys(colorLight) as (keyof typeof colorLight)[];
     const allSame = sharedKeys.every((k) => colorLight[k] === colorDark[k]);
     expect(allSame).toBe(false);
+  });
+
+  it("both light and dark scales contain at least one semantic color key", () => {
+    expect(Object.keys(colorLight).length).toBeGreaterThan(0);
+    expect(Object.keys(colorDark).length).toBeGreaterThan(0);
   });
 });

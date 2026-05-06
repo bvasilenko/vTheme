@@ -20,8 +20,13 @@ describe("deepFreeze — primitive passthrough", () => {
     expect(deepFreeze(undefined)).toBeUndefined();
   });
 
-  it("returns boolean true unchanged", () => {
-    expect(deepFreeze(true)).toBe(true);
+  it.each([true, false])("returns boolean %s unchanged", (value) => {
+    expect(deepFreeze(value)).toBe(value);
+  });
+
+  it("returns a Symbol unchanged", () => {
+    const sym = Symbol("test");
+    expect(deepFreeze(sym)).toBe(sym);
   });
 });
 
@@ -82,6 +87,13 @@ describe("deepFreeze — recursive freezing", () => {
     const record = deepFreeze({ a: { val: 1 }, b: { val: 2 } });
     expect(Object.isFrozen(record.a)).toBe(true);
     expect(Object.isFrozen(record.b)).toBe(true);
+  });
+
+  it("does not attempt to freeze null-valued properties", () => {
+    const obj = { a: null, b: { val: 1 } };
+    expect(() => deepFreeze(obj)).not.toThrow();
+    expect(Object.isFrozen(obj)).toBe(true);
+    expect(Object.isFrozen(obj.b)).toBe(true);
   });
 });
 
