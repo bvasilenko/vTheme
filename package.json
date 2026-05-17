@@ -1,7 +1,7 @@
 {
   "name": "@booga/vtheme",
-  "version": "0.1.0",
-  "description": "Design tokens: 8px grid spacing, OKLCH color, modular type scale. CSS vars, Tailwind config, TypeScript constants. Zero runtime.",
+  "version": "0.2.0",
+  "description": "Design tokens: 8px grid spacing, OKLCH color, modular type scale. CSS vars, Tailwind preset, TypeScript constants. Zero runtime.",
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.cjs",
@@ -12,6 +12,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./preset": {
+      "types": "./dist/preset.d.ts",
+      "import": "./dist/preset.js",
+      "require": "./dist/preset.cjs"
     }
   },
   "files": [
@@ -31,12 +36,16 @@
   "dependencies": {
     "zod": "^3.0.0"
   },
+  "peerDependencies": {
+    "tailwindcss": "^3.4.0"
+  },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
     "@vitest/coverage-istanbul": "^2.1.9",
     "@vitest/coverage-v8": "^2.0.0",
     "eslint": "^9.0.0",
     "globals": "^15.0.0",
+    "tailwindcss": "^3.4.0",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",
     "typescript-eslint": "^8.0.0",

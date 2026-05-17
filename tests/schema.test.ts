@@ -2,7 +2,7 @@
 // Copyright (c) 2026 bvasilenko
 import { describe, it, expect } from "vitest";
 import {
-  OKLCHSchema,
+  OKLCHChannelsSchema,
   SpaceKeySchema,
   SpaceScaleSchema,
   ColorScaleSchema,
@@ -10,38 +10,37 @@ import {
   TypeScaleSchema,
   MotionScaleSchema,
   TokenTreeSchema,
+  COLOR_ROLES,
   tokens,
+  colorLight,
 } from "../src/index.js";
 
-describe("OKLCHSchema — valid inputs", () => {
+describe("OKLCHChannelsSchema — valid inputs", () => {
   const validCases = [
-    "oklch(0% 0 0)",
-    "oklch(100% 0 0)",
-    "oklch(50% 0.2 180)",
-    "oklch(98% 0.005 240)",
-    "oklch(0% 0.4 360)",
-    "oklch(73% 0.15 30)",
+    "0% 0 0",
+    "100% 0 0",
+    "50% 0.2 180",
+    "98% 0.005 240",
+    "73% 0.15 30",
   ];
 
-  it.each(validCases)("accepts: %s", (value) => {
-    expect(OKLCHSchema.safeParse(value).success).toBe(true);
+  it.each(validCases)("accepts channel triple: %s", (value) => {
+    expect(OKLCHChannelsSchema.safeParse(value).success).toBe(true);
   });
 });
 
-describe("OKLCHSchema — invalid inputs", () => {
+describe("OKLCHChannelsSchema — invalid inputs", () => {
   const invalidCases: [string, string][] = [
-    ["oklch(98%0.005 240)",    "no space between % and chroma"],
-    ["oklch(98 0.005 240)",    "missing % on lightness"],
-    ["rgb(255 0 0)",           "wrong function name"],
-    ["oklch(98% 0.005)",       "missing hue component"],
-    ["oklch(98% 0.005 240 / 0.5)", "alpha channel not part of spec"],
-    ["",                       "empty string"],
-    ["oklch()",                "no arguments"],
-    ["oklch(98% 0.005 240",    "unclosed parenthesis"],
+    ["oklch(98% 0.005 240)", "must be channels only, no oklch() wrapper"],
+    ["98%0.005 240", "no space between % and chroma"],
+    ["98 0.005 240", "missing % on lightness"],
+    ["98% 0.005", "missing hue component"],
+    ["98% 0.005 240 / 0.5", "alpha not part of the channel form"],
+    ["", "empty string"],
   ];
 
   it.each(invalidCases)("rejects: %s — %s", (value) => {
-    expect(OKLCHSchema.safeParse(value).success).toBe(false);
+    expect(OKLCHChannelsSchema.safeParse(value).success).toBe(false);
   });
 });
 
@@ -60,9 +59,9 @@ describe("SpaceKeySchema — valid and invalid keys", () => {
 
 describe("SpaceScaleSchema — value format validation", () => {
   const validValues: [string, string][] = [
-    ["{ '0': '0rem' }",     "0rem"],
-    ["{ '1': '0.5rem' }",  "0.5rem"],
-    ["{ '2': '8px' }",     "8px"],
+    ["{ '0': '0rem' }", "0rem"],
+    ["{ '1': '0.5rem' }", "0.5rem"],
+    ["{ '2': '8px' }", "8px"],
     ["{ '3': '0.25rem' }", "0.25rem"],
   ];
 
@@ -71,11 +70,11 @@ describe("SpaceScaleSchema — value format validation", () => {
   });
 
   const invalidValues: [string, string][] = [
-    ["em unit",    "0.5em"],
-    ["no unit",    "0.5"],
-    ["unit only",  "rem"],
-    ["empty",      ""],
-    ["vw unit",    "100vw"],
+    ["em unit", "0.5em"],
+    ["no unit", "0.5"],
+    ["unit only", "rem"],
+    ["empty", ""],
+    ["vw unit", "100vw"],
   ];
 
   it.each(invalidValues)("rejects value with %s", (_, value) => {
@@ -93,17 +92,23 @@ describe("SpaceScaleSchema — key validation", () => {
   });
 });
 
-describe("ColorScaleSchema — structural constraints", () => {
-  it("accepts an empty record", () => {
-    expect(ColorScaleSchema.safeParse({}).success).toBe(true);
+describe("ColorScaleSchema — full-role contract", () => {
+  it("accepts a scale defining every color role", () => {
+    expect(ColorScaleSchema.safeParse(colorLight).success).toBe(true);
   });
 
-  it("accepts arbitrary string keys paired with valid OKLCH values", () => {
-    expect(ColorScaleSchema.safeParse({ custom: "oklch(50% 0.1 200)" }).success).toBe(true);
+  it("rejects a scale missing one or more roles", () => {
+    const { ring: _omitted, ...incomplete } = colorLight;
+    expect(ColorScaleSchema.safeParse(incomplete).success).toBe(false);
   });
 
-  it("rejects a record containing an invalid OKLCH value", () => {
-    expect(ColorScaleSchema.safeParse({ bg: "not-oklch" }).success).toBe(false);
+  it("rejects a scale with an invalid channel value on a role", () => {
+    const invalid = { ...colorLight, primary: "oklch(50% 0.1 200)" };
+    expect(ColorScaleSchema.safeParse(invalid).success).toBe(false);
+  });
+
+  it("requires exactly the COLOR_ROLES key set", () => {
+    expect(Object.keys(colorLight).sort()).toEqual([...COLOR_ROLES].sort());
   });
 });
 
@@ -119,9 +124,9 @@ describe("TypeStepSchema — weight boundary validation", () => {
   const invalidWeights: [string, number][] = [
     ["below minimum", 99],
     ["above maximum", 901],
-    ["non-integer",   400.5],
-    ["negative",      -100],
-    ["zero",          0],
+    ["non-integer", 400.5],
+    ["negative", -100],
+    ["zero", 0],
   ];
 
   it.each(invalidWeights)("rejects weight %s (%d)", (_, weight) => {
@@ -199,7 +204,7 @@ describe("TokenTreeSchema — round-trip validation", () => {
   });
 
   it("rejects a tree with an invalid color value", () => {
-    const invalid = { ...tokens, color: { bg: "not-an-oklch-value" } };
+    const invalid = { ...tokens, color: { ...colorLight, background: "not-a-channel-triple" } };
     expect(TokenTreeSchema.safeParse(invalid).success).toBe(false);
   });
 

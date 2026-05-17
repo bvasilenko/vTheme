@@ -1,6 +1,6 @@
 # vTheme
 
-Design tokens: spacing on an 8px grid, color in OKLCH, type scale in modular fifths. One source, three targets — CSS variables, Tailwind theme config, TypeScript constants. Build-time only; no runtime, no provider.
+Design tokens: spacing on an 8px grid, color in OKLCH, type scale in modular fifths. One source, three targets — a Tailwind preset, CSS variables, TypeScript constants. Build-time only; no runtime, no provider.
 
 ## Install
 
@@ -8,34 +8,40 @@ Design tokens: spacing on an 8px grid, color in OKLCH, type scale in modular fif
 npm install @booga/vtheme
 ```
 
-## Usage
+## Tailwind preset — the canonical path
 
-```ts
-import { tokens, cssVars, tailwindTheme } from "@booga/vtheme";
+```js
+// tailwind.config.js
+import vtheme from "@booga/vtheme/preset";
 
-// TypeScript constants — frozen, mutation throws
-tokens.space["4"]; // "2rem"
-tokens.color.accent; // "oklch(55% 0.2 250)"
-
-// CSS custom properties for :root { ... }
-const vars = cssVars(tokens);
-// { "--v-color-bg": "oklch(98% 0.005 240)", "--v-space-4": "2rem", ... }
-
-// Tailwind v3 theme.extend
-// tailwind.config.ts → theme: { extend: tailwindTheme }
+export default {
+  presets: [vtheme],
+  content: ["./src/**/*.{ts,tsx}"],
+};
 ```
 
-## Tailwind v4
+One import wires everything: the token theme (spacing, color, type, motion), every color role as a `--v-color-<role>` CSS variable at `:root`, the dark-mode variant under `.dark`, and `darkMode: "class"`.
 
-CSS-first config consumers: pipe `cssVars(tokens)` entries into `@theme { }`.
+## Color roles
 
-## Light / Dark
+vTheme is the single source of color truth. It defines a complete semantic surface-role set — every base role paired with a `-foreground` for contrast:
+
+`background` · `card` · `popover` · `primary` · `secondary` · `muted` · `accent` · `destructive` · `success` · `warning` (each with `-foreground`), plus the line roles `border` · `input` · `ring`.
+
+Each role resolves as `oklch(var(--v-color-<role>) / <alpha-value>)`, so Tailwind opacity modifiers (`bg-primary/80`) and dark mode both work.
+
+## TypeScript / CSS-variable consumers
 
 ```ts
-import { colorLight, colorDark } from "@booga/vtheme";
+import { tokens, cssVars, colorLight, colorDark } from "@booga/vtheme";
+
+tokens.space["4"];          // "2rem"
+tokens.color.primary;       // "55% 0.2 250" (OKLCH channels)
+
+cssVars(tokens);            // { "--v-color-primary": "55% 0.2 250", "--v-space-4": "2rem", ... }
 ```
 
-Switch via CSS class; no runtime provider required.
+`colorLight` / `colorDark` carry the two modes; the preset emits both.
 
 ## License
 

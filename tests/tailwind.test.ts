@@ -64,9 +64,15 @@ describe("tailwindTheme — value correctness against token source", () => {
     }
   });
 
-  it("colors values match the color scale values", () => {
+  it("colors resolve each role through its --v-color variable with an alpha channel", () => {
     for (const [key, value] of Object.entries(tailwindTheme.colors)) {
-      expect(value).toBe(tokens.color[key]);
+      expect(value).toBe(`oklch(var(--v-color-${key}) / <alpha-value>)`);
+    }
+  });
+
+  it("every color role from the token scale is present in the Tailwind colors", () => {
+    for (const role of Object.keys(tokens.color)) {
+      expect(tailwindTheme.colors).toHaveProperty(role);
     }
   });
 

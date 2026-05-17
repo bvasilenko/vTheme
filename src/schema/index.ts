@@ -8,9 +8,11 @@ export {
 } from "./space.schema.js";
 
 export {
-  OKLCHSchema,
+  OKLCHChannelsSchema,
   ColorScaleSchema,
-  type OKLCH,
+  COLOR_ROLES,
+  type OKLCHChannels,
+  type ColorRole,
   type ColorScale,
 } from "./color.schema.js";
 

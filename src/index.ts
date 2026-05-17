@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2026 bvasilenko
 export { tokens, colorLight, colorDark } from "./tokens/index.js";
-export { cssVars, tailwindTheme, type TailwindExtendTheme } from "./build/index.js";
+export { cssVars, tailwindTheme, preset, type TailwindExtendTheme } from "./build/index.js";
 export {
   type TokenTree,
   type SpaceKey,
   type SpaceScale,
-  type OKLCH,
+  type OKLCHChannels,
+  type ColorRole,
   type ColorScale,
   type TypeKey,
   type TypeStep,
@@ -14,9 +15,10 @@ export {
   type EaseMap,
   type DurationMap,
   type MotionScale,
+  COLOR_ROLES,
   SpaceKeySchema,
   SpaceScaleSchema,
-  OKLCHSchema,
+  OKLCHChannelsSchema,
   ColorScaleSchema,
   TypeKeySchema,
   TypeStepSchema,
