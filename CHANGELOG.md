@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-05-18
+
+### Fixed
+
+- Spacing scale is now complete and coherent. The previous scale defined only `0,1,2,3,4,6,8,12,16,24,32` at a non-standard ×0.5rem multiplier; under Tailwind's `extend`, consumer classes on undefined keys (`h-10`, `p-2.5`, `w-11`, …) fell through to Tailwind's ×0.25rem defaults, producing a non-monotonic scale (`h-6` resolved larger than `h-10`). `spaceScale` is now the full standard 4px-grid scale (`0`…`96` plus `px` and the `0.5`/`1.5`/`2.5`/`3.5` half-steps), so every spacing key resolves from one source, monotonically.
+- `SpaceKeySchema` widened to the full standard key set.
+
 ## [0.2.0] - 2026-05-17
 
 ### Added
@@ -32,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Zod schemas for all token domains (`SpaceScaleSchema`, `OKLCHSchema`, `ColorScaleSchema`, `TypeStepSchema`, `TypeScaleSchema`, `MotionScaleSchema`, `TokenTreeSchema`)
 - Full TypeScript type exports (`TokenTree`, `SpaceScale`, `ColorScale`, `TypeScale`, `MotionScale`, `OKLCH`)
 
-[Unreleased]: https://github.com/bvasilenko/vTheme/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/bvasilenko/vTheme/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/bvasilenko/vTheme/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/bvasilenko/vTheme/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/bvasilenko/vTheme/releases/tag/v0.1.0

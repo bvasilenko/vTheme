@@ -45,8 +45,8 @@ describe("OKLCHChannelsSchema — invalid inputs", () => {
 });
 
 describe("SpaceKeySchema — valid and invalid keys", () => {
-  const validKeys = ["0", "1", "2", "3", "4", "6", "8", "12", "16", "24", "32"];
-  const invalidKeys = ["5", "7", "9", "10", "100", "", "0.5"];
+  const validKeys = ["0", "px", "0.5", "1", "1.5", "2.5", "4", "5", "9", "10", "11", "72", "96"];
+  const invalidKeys = ["13", "100", "", "0.25", "5.5", "2x", "-4"];
 
   it.each(validKeys)("accepts valid key: %s", (key) => {
     expect(SpaceKeySchema.safeParse(key).success).toBe(true);
@@ -84,11 +84,11 @@ describe("SpaceScaleSchema — value format validation", () => {
 
 describe("SpaceScaleSchema — key validation", () => {
   it("rejects a key outside the canonical space key enum", () => {
-    expect(SpaceScaleSchema.safeParse({ "5": "2rem" }).success).toBe(false);
+    expect(SpaceScaleSchema.safeParse({ "13": "2rem" }).success).toBe(false);
   });
 
   it("accepts a partial subset of canonical keys", () => {
-    expect(SpaceScaleSchema.safeParse({ "0": "0rem", "4": "2rem" }).success).toBe(true);
+    expect(SpaceScaleSchema.safeParse({ "0": "0rem", "4": "1rem" }).success).toBe(true);
   });
 });
 
