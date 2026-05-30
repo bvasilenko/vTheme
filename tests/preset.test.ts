@@ -2,7 +2,15 @@
 // Copyright (c) 2026 bvasilenko
 import { describe, it, expect } from "vitest";
 import preset from "../src/preset.js";
-import { COLOR_ROLES, colorLight, colorDark } from "../src/index.js";
+import {
+  COLOR_ROLES,
+  FONT_ROLES,
+  TRACKING_ROLES,
+  colorLight,
+  colorDark,
+  fontFamilyScale,
+  trackingScale,
+} from "../src/index.js";
 
 describe("vTheme Tailwind preset — config shape", () => {
   it("enables class-based dark mode", () => {
@@ -55,6 +63,36 @@ describe("vTheme Tailwind preset — base layer variable injection", () => {
     expect(base).toHaveProperty(".dark");
     for (const role of COLOR_ROLES) {
       expect(base[".dark"][`--v-color-${role}`]).toBe(colorDark[role]);
+    }
+  });
+
+  it("injects :root with every font role as a --v-font variable", () => {
+    const base = runPlugin();
+    for (const role of FONT_ROLES) {
+      expect(base[":root"][`--v-font-${role}`]).toBe(fontFamilyScale[role]);
+    }
+  });
+
+  it("injects :root with every tracking role as a --v-tracking variable", () => {
+    const base = runPlugin();
+    for (const role of TRACKING_ROLES) {
+      expect(base[":root"][`--v-tracking-${role}`]).toBe(trackingScale[role]);
+    }
+  });
+});
+
+describe("vTheme Tailwind preset - fontFamily and letterSpacing theme extends", () => {
+  it("extends theme.fontFamily with sans, serif, mono via --v-font vars", () => {
+    const fontFamily = (preset.theme?.extend?.fontFamily ?? {}) as Record<string, string>;
+    for (const role of FONT_ROLES) {
+      expect(fontFamily[role]).toBe(`var(--v-font-${role})`);
+    }
+  });
+
+  it("extends theme.letterSpacing with tight, normal, wide via --v-tracking vars", () => {
+    const letterSpacing = (preset.theme?.extend?.letterSpacing ?? {}) as Record<string, string>;
+    for (const role of TRACKING_ROLES) {
+      expect(letterSpacing[role]).toBe(`var(--v-tracking-${role})`);
     }
   });
 });

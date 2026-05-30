@@ -1,6 +1,6 @@
 {
   "name": "@booga/vtheme",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "Design tokens: 4px-grid spacing, OKLCH color, modular type scale. CSS vars, Tailwind preset, TypeScript constants. Zero runtime.",
   "type": "module",
   "sideEffects": false,

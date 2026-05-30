@@ -2,7 +2,7 @@
 // Copyright (c) 2026 bvasilenko
 import type { SpaceScale } from "../schema/index.js";
 
-// The complete spacing scale — the standard 4px grid (integer keys are 4px
+// The complete spacing scale - the standard 4px grid (integer keys are 4px
 // multiples; `0.5`/`1.5`/`2.5`/`3.5` and `px` are the documented half-steps).
 // It is declared in full so the Tailwind contract never falls through to a
 // differently-valued default: every spacing key a consumer can write resolves

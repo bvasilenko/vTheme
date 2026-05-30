@@ -111,7 +111,9 @@ describe("cssVars — output completeness", () => {
       Object.keys(tokens.color).length +
       Object.keys(tokens.type).length * typeFieldCount +
       Object.keys(tokens.motion.ease).length +
-      Object.keys(tokens.motion.duration).length;
+      Object.keys(tokens.motion.duration).length +
+      Object.keys(tokens.font).length +
+      Object.keys(tokens.tracking).length;
     expect(Object.keys(vars).length).toBe(expected);
   });
 });

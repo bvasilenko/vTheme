@@ -1,6 +1,18 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2026 bvasilenko
-export { tokens, colorLight, colorDark } from "./tokens/index.js";
+export {
+  tokens,
+  colorLight,
+  colorDark,
+  fontFamilyScale,
+  fontSerif,
+  fontSans,
+  fontMono,
+  trackingScale,
+  trackingTight,
+  trackingNormal,
+  trackingWide,
+} from "./tokens/index.js";
 export { cssVars, tailwindTheme, preset, type TailwindExtendTheme } from "./build/index.js";
 export {
   type TokenTree,
@@ -15,14 +27,25 @@ export {
   type EaseMap,
   type DurationMap,
   type MotionScale,
+  type FontRole,
+  type FontFamilyScale,
+  type TrackingRole,
+  type TrackingScale,
   COLOR_ROLES,
+  FONT_ROLES,
+  TRACKING_ROLES,
   SpaceKeySchema,
   SpaceScaleSchema,
   OKLCHChannelsSchema,
   ColorScaleSchema,
+  parseColorScale,
   TypeKeySchema,
   TypeStepSchema,
   TypeScaleSchema,
   MotionScaleSchema,
+  FontFamilyValueSchema,
+  FontFamilyScaleSchema,
+  TrackingValueSchema,
+  TrackingScaleSchema,
   TokenTreeSchema,
 } from "./schema/index.js";
